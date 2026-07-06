@@ -210,3 +210,5 @@ ruff check src tests
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+If this catches something in your sessions, [a star](https://github.com/hermes-labs-ai/te-drift-detector) helps other people find it.

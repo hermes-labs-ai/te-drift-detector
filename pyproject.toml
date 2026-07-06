@@ -41,6 +41,7 @@ dev = [
 [project.urls]
 "Homepage" = "https://github.com/hermes-labs-ai/te-drift-detector"
 "Repository" = "https://github.com/hermes-labs-ai/te-drift-detector"
+"Documentation" = "https://github.com/hermes-labs-ai/te-drift-detector#readme"
 "Issues" = "https://github.com/hermes-labs-ai/te-drift-detector/issues"
 "Changelog" = "https://github.com/hermes-labs-ai/te-drift-detector/blob/main/CHANGELOG.md"
 
