@@ -1,5 +1,10 @@
 # te-drift-detector
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![CI](https://github.com/hermes-labs-ai/te-drift-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/hermes-labs-ai/te-drift-detector/actions/workflows/ci.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
+[![Zero LLM calls](https://img.shields.io/badge/LLM%20calls-0-purple)](README.md)
+
 Cross-turn scaffold/state drift detection for agent sessions. It catches the
 gradual corruption of a conversation's working state that looks clean turn by
 turn but adds up to a compromised session.

@@ -16,7 +16,7 @@ drift a per-turn check cannot see.
 
 ## Install
 
-    pip install te-drift-detector
+    pip install git+https://github.com/hermes-labs-ai/te-drift-detector  # not yet on PyPI
 
 ## CLI
 

@@ -12,6 +12,7 @@ license = "MIT"
 authors = [{ name = "Hermes Labs", email = "roli@hermes-labs.ai" }]
 keywords = ["llm", "agent", "drift-detection", "scaffold", "multi-turn", "evaluation", "monitoring"]
 classifiers = [
+  "License :: OSI Approved :: MIT License",
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
@@ -38,7 +39,8 @@ dev = [
 ]
 
 [project.urls]
-"Source" = "https://github.com/hermes-labs-ai/te-drift-detector"
+"Homepage" = "https://github.com/hermes-labs-ai/te-drift-detector"
+"Repository" = "https://github.com/hermes-labs-ai/te-drift-detector"
 "Issues" = "https://github.com/hermes-labs-ai/te-drift-detector/issues"
 "Changelog" = "https://github.com/hermes-labs-ai/te-drift-detector/blob/main/CHANGELOG.md"
 
