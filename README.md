@@ -44,8 +44,10 @@ full determination.)
 
 ## Install
 
+Not yet on PyPI — install from GitHub:
+
 ```bash
-pip install te-drift-detector
+pip install git+https://github.com/hermes-labs-ai/te-drift-detector
 ```
 
 Or from source:
