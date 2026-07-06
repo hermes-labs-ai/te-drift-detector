@@ -35,7 +35,7 @@ would never see.
 
 Our own [LPCI](https://github.com/hermes-labs-ai/langquant) work found that the
 language scaffold strongly shapes an agent's behavior: in a recall A/B on
-scaffolded vs. unscaffolded sessions (langquant commit `dd918cc`), scaffolded
+scaffolded vs. unscaffolded sessions (langquant commit [`dd918cc`](https://github.com/hermes-labs-ai/langquant/commit/dd918cc)), scaffolded
 recall was 0.83 versus 0.00 unscaffolded across n=74 sessions, with roughly
 2.5x context compression. The scaffold clearly does a lot of the steering — it
 is not the *only* input and does not fully determine the output, but if the
@@ -76,7 +76,11 @@ te-drift detect --attack-type normal
 te-drift eval
 ```
 
-Analyzing a real session transcript (JSONL with `{"type","message":{"role","content"},"timestamp"}` records, e.g. Claude Code sessions):
+Analyzing a real session transcript (JSONL, one record per turn, e.g. Claude Code session logs):
+
+```json
+{"type": "user", "message": {"role": "user", "content": "..."}, "timestamp": "2026-07-06T20:00:00Z"}
+```
 
 ```bash
 te-drift session --session-jsonl path/to/session.jsonl
