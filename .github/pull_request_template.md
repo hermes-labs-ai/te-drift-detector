@@ -6,7 +6,7 @@
 
 - [ ] All existing tests pass (`pytest`)
 - [ ] New tests added for changed behavior
-- [ ] Manually verified with example scope configs
+- [ ] Manually verified against an example session JSONL
 
 ## Related Issues
 

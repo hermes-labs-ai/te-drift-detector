@@ -6,7 +6,7 @@ body:
     id: description
     attributes:
       label: Description
-      description: A clear description of the bug. Do not paste secrets, API keys, private policy scopes, or sensitive forensic logs.
+      description: A clear description of the bug. Do not paste secrets, API keys, or real session content containing sensitive data.
     validations:
       required: true
   - type: textarea
@@ -15,7 +15,7 @@ body:
       label: Reproduction Steps
       description: Steps to reproduce the behavior.
       placeholder: |
-        1. Run `suy-warden --scope ...`
+        1. Run `te-drift session --session-jsonl ...`
         2. See error ...
     validations:
       required: true
