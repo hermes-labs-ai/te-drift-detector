@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use te-drift-detector in your work, please cite it as below."
+title: "te-drift-detector: cross-turn scaffold/state drift detection for agent sessions"
+abstract: >-
+  A standard-library Python tool that detects gradual scaffold/state drift across
+  the turns of an agent conversation. It fingerprints per-turn features (facts,
+  entities, sentiment, task framing, authority, register, negation, vocabulary),
+  measures drift against a baseline and turn-to-turn velocity, and flags
+  sustained corruption that looks clean turn-by-turn. Ships with an eval harness
+  that runs known scaffold-corruption strategies through the detector.
+type: software
+authors:
+  - name: "Hermes Labs"
+license: MIT
+version: "0.1.0"
+date-released: "2026-07-06"
+repository-code: "https://github.com/hermes-labs-ai/te-drift-detector"
+keywords:
+  - large-language-models
+  - agents
+  - drift-detection
+  - multi-turn
+  - evaluation
+  - monitoring

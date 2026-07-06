@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "te-drift-detector"
+version = "0.1.0"
+description = "Cross-turn scaffold/state drift detection for agent sessions — catches gradual corruption that looks clean turn-by-turn"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Hermes Labs", email = "roli@hermes-labs.ai" }]
+keywords = ["llm", "agent", "drift-detection", "scaffold", "multi-turn", "evaluation", "monitoring"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security",
+]
+
+# Zero required runtime dependencies. Everything runs on the standard library.
+# Semantic embeddings are an optional enhancement via a local Ollama endpoint;
+# without it the detector falls back to a set-overlap drift metric.
+dependencies = []
+
+[project.scripts]
+te-drift = "te_drift.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.4",
+]
+
+[project.urls]
+"Source" = "https://github.com/hermes-labs-ai/te-drift-detector"
+"Issues" = "https://github.com/hermes-labs-ai/te-drift-detector/issues"
+"Changelog" = "https://github.com/hermes-labs-ai/te-drift-detector/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]
