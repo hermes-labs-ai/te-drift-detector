@@ -1,0 +1,69 @@
+# te-drift-detector
+
+> Cross-turn scaffold/state drift detection for agent sessions. Catches gradual
+> corruption of a conversation's working state that looks clean turn-by-turn but
+> compounds into a compromised session. Zero required dependencies, deterministic
+> by default, standard-library Python.
+
+## What it does
+
+Per-turn safety filters read each message in isolation and miss slow state
+corruption: the running system scaffold / summary / context is nudged a little
+each turn until the assumptions the model operates under have inverted, with no
+single turn looking like an attack. te-drift-detector fingerprints each turn,
+measures drift from a baseline and turn-to-turn velocity, and flags sustained
+drift a per-turn check cannot see.
+
+## Install
+
+    pip install te-drift-detector
+
+## CLI
+
+    te-drift detect --attack-type poisoning      # analyze a built-in conversation
+    te-drift detect --attack-type normal
+    te-drift session --session-jsonl PATH        # analyze a session transcript (JSONL)
+    te-drift session --session-jsonl PATH --mode sliding-window --window-size 10
+    te-drift eval                                # run scaffold-corruption eval harness
+
+## Python
+
+    from te_drift import TEDriftDetector
+    report = TEDriftDetector().run_conversation([(role, text), ...])
+    report["threat_level"]        # NORMAL / LOW / MEDIUM / HIGH / CRITICAL
+    report["anomalies_detected"]  # int
+
+    from te_drift import load_turns, run_drift_analysis   # JSONL adapter
+    from te_drift.evals import run_all                    # eval harness
+
+## How it works
+
+Eight per-turn features (facts, entities, sentiment, task framing, authority,
+register, negations, vocabulary). Absolute drift vs. baseline plus velocity vs.
+previous turn, combined with fixed weights. Anomaly if absolute drift > 0.50,
+velocity > 0.30, 3+ component thresholds breached, or a known signature matches
+(scaffold poisoning / persona drift / constraint bypass / scaffold interference).
+
+Drift is lexical (set overlap) by default: deterministic and dependency-free.
+Optional semantic embeddings via a local Ollama endpoint are opt-in with
+TE_DRIFT_EMBED=1.
+
+## Detect, then recover
+
+te-drift-detector is the detect half of a pair. The recover half is hermes-blind
+(https://github.com/hermes-labs-ai/hermes-blind), a recovery scaffold injected
+mid-conversation to pull a drifting session back toward baseline. Monitor drift
+here; inject recovery with hermes-blind; confirm the trajectory bends back.
+
+## Evidence and honest limits
+
+The scaffold strongly shapes agent behavior (langquant recall A/B 0.83 vs. 0.00
+across n=74 sessions, ~2.5x compression), which is why monitoring scaffold-state
+integrity is worthwhile. It is strong influence on a small sample, not full
+determination. Thresholds are conservative defaults; the feature set is
+heuristic and English-oriented; meaning-preserving corruption can slip under
+lexical drift. Complementary to per-turn filters, not a replacement.
+
+## Repo
+
+https://github.com/hermes-labs-ai/te-drift-detector
