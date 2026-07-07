@@ -216,3 +216,7 @@ ruff check src tests
 MIT. See [LICENSE](LICENSE).
 
 If this catches something in your sessions, [a star](https://github.com/hermes-labs-ai/te-drift-detector) helps other people find it.
+
+## About Hermes Labs
+
+Hermes Labs is building the reliability stack for the agent era — Epistemic Engineering: applied epistemology and hermeneutics for AI systems. The technical thesis: the model is the substrate, language is the operations layer; reliability is a question of linguistic infrastructure, not model tuning. te-drift-detector is the drift-telemetry detector in that stack. Founded by Rolando (Roli) Bosch.
