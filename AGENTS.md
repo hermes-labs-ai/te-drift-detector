@@ -5,39 +5,34 @@ integrate this package.
 
 ## What this is
 
-A small standard-library tool that detects cross-turn drift in an agent
-session's working state. It fingerprints each turn, measures drift from a
-baseline and turn-to-turn velocity, and flags sustained corruption that a
-per-turn filter would miss. It is not a model, an API, or a judge.
+Experimental lexical feature-delta telemetry for multi-turn text. It extracts
+features from supplied text, measures baseline-relative changes, and reports
+hand-set threshold crossings for human inspection. It is not a model, API, or
+judge.
 
-## What this is not
+The package does not establish malicious drift, model compromise, calibrated
+confidence, or safety severity. Detection efficacy, threshold calibration, and
+recovery benefit remain unproved.
 
-- Not a per-turn jailbreak classifier — it is complementary to one, not a
-  substitute.
-- Not a guaranteed detector. Thresholds are conservative defaults; calibrate per
-  deployment.
-- Not semantic by default. Drift is lexical (set overlap) unless you opt into
-  embeddings with `TE_DRIFT_EMBED=1`.
+## Appropriate use
 
-## When to invoke
+Use the tool for exploratory inspection, local debugging, or for generating raw
+measurements that a human will review. Do not use a crossing as an autonomous
+security decision, a reason to block a user, or proof that a session was
+compromised.
 
-Use it when an agent runs multi-turn and its working state (system scaffold,
-running summary, injected context) could be nudged over time — session
-monitoring, post-hoc transcript audits, or a SessionEnd hook.
-
-Skip it for single-turn classification, or when you need meaning-preserving
-corruption caught (lexical drift can miss synonym-level rewrites).
+The direct library interface accepts caller-supplied `(role, text)` tuples. The
+JSONL adapter observes user and assistant records; it does not currently model a
+general system/scaffold state schema.
 
 ## Minimal invocation
 
 ```python
 from te_drift import TEDriftDetector
 
-turns = [(role, text), ...]              # role in {system, user, assistant}
+turns = [(role, text), ...]
 report = TEDriftDetector().run_conversation(turns)
-
-if report["threat_level"] in ("HIGH", "CRITICAL"):
-    ...  # escalate, or inject a recovery scaffold (see hermes-blind)
+inspect(report["readings"])
 ```
 
 Session transcript (JSONL):
@@ -45,58 +40,58 @@ Session transcript (JSONL):
 ```python
 from te_drift import load_turns, run_drift_analysis
 
-turns = load_turns("session.jsonl")               # (role, text, timestamp) tuples
+turns = load_turns("session.jsonl")
 report = run_drift_analysis(turns, mode="sliding-window", window_size=10)
 ```
 
-## Expected output shape
+## Output interpretation
 
-`summary_report()` / `run_conversation()` return a dict with:
+`summary_report()` and `run_conversation()` return raw feature deltas plus
+legacy fields named `confidence` and `threat_level`. Those fields are
+uncalibrated rule scores and heuristic tiers; they are not safety severity or a
+probability of compromise. The field named `velocity_drift` measures change in
+the scalar baseline-distance value, not direct previous-fingerprint distance.
 
-- `total_turns`, `anomalies_detected`, `threat_level`, `sustained_anomaly`
-- `avg_absolute_drift`, `max_absolute_drift`
-- `readings`: per-turn `{turn, absolute_drift, velocity_drift, is_anomaly,
-  anomaly_reason, confidence, components}`
+## Network and sensitive-input boundary
 
-## Thresholds (defaults, tunable via class attributes on `DriftAnalyzer`)
+The default lexical path stays in-process. `TE_DRIFT_EMBED=1` can make an
+optional configured network call to `TE_DRIFT_OLLAMA_URL` and transmit analyzed
+text. If the endpoint is unavailable, errors, or returns no vector, the current
+implementation silently falls back to lexical set overlap and does not expose
+that fallback in its report. Embedding quality is unevaluated.
 
-- `ABSOLUTE_DRIFT_THRESHOLD = 0.50`
-- `VELOCITY_DRIFT_THRESHOLD = 0.30`
-- `CONSECUTIVE_ANOMALY_THRESHOLD = 3`
-- `CRITICAL_COMPONENTS` — per-component thresholds
+Do not enable optional networking for sensitive material without reviewing and
+trusting the configured endpoint. Do not place private transcripts in tests,
+issues, or commits.
 
-## Eval harness
+## Demo/self-check fixtures
 
-`te_drift.evals` generates scaffold-corruption sequences (fact_injection,
-term_redefinition, bias_drift) and runs them through the detector. Dry-run by
-construction — no model calls, no network.
+`te_drift.evals` generates three synthetic sequences and runs them through the
+same repository's rules. These fixtures exercise deterministic wiring only.
+They do not estimate false-positive rates, false-negative rates, effectiveness,
+or generalization.
 
 ```python
 from te_drift.evals import run_all
+
 results = run_all(num_turns=5)
 ```
 
-## Detect, then recover
+## Development signal
 
-This is the detect half. The recover half is
-[hermes-blind](https://github.com/hermes-labs-ai/hermes-blind): a recovery
-scaffold injected mid-conversation to pull a drifting session back toward
-baseline. Loop: monitor drift here, inject recovery there, confirm the
-trajectory bends back.
-
-## Success signal
-
-- `pytest` returns 0 across 41 tests, no skips.
+- The full test suite returns zero.
 - `ruff check src tests` is clean.
-- `te-drift eval` flags corruption in all three strategies.
+- An sdist and wheel build and the installed CLI runs its documented commands.
+
+Do not convert a green self-check into a claim of detection quality. Preserve
+the name, public API, algorithms, and thresholds unless a separately authorized
+change explicitly covers them.
 
 ## Extension points
 
-- New features: add an extractor in `state_fingerprint.py`, a comparison method,
-  wire it into `composite_drift()`, and add a weight in `DriftAnalyzer`.
-- New attack signatures: extend `_detect_attack_pattern` in `drift_analyzer.py`.
-- New eval strategies: add a strategy class in `te_drift/evals/strategies.py`
-  and register it in `generate_attack_sequence`.
+- New lexical features live in `state_fingerprint.py`.
+- Comparison and threshold rules live in `drift_analyzer.py`.
+- Synthetic sequence generators live in `te_drift/evals/strategies.py`.
 
-Do not add runtime dependencies. The standard-library-only guarantee is part of
-the tool's shape; embeddings stay an opt-in enhancement, never required.
+Do not add required runtime dependencies. Optional embeddings remain explicitly
+configured and must retain the network and fallback disclosures above.

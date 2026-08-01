@@ -1,13 +1,13 @@
 cff-version: 1.2.0
 message: "If you use te-drift-detector in your work, please cite it as below."
-title: "te-drift-detector: cross-turn scaffold/state drift detection for agent sessions"
+title: "te-drift-detector: experimental lexical feature-delta telemetry"
 abstract: >-
-  A standard-library Python tool that detects gradual scaffold/state drift across
-  the turns of an agent conversation. It fingerprints per-turn features (facts,
-  entities, sentiment, task framing, authority, register, negation, vocabulary),
-  measures drift against a baseline and turn-to-turn velocity, and flags
-  sustained corruption that looks clean turn-by-turn. Ships with an eval harness
-  that runs known scaffold-corruption strategies through the detector.
+  Experimental lexical feature-delta telemetry for multi-turn text. This
+  standard-library Python package extracts lexical features, compares them with
+  a first-turn baseline, and reports raw deltas and uncalibrated heuristic
+  threshold crossings for human inspection. Its bundled synthetic fixtures are
+  implementation self-checks, not evidence of detection efficacy or safety
+  severity.
 type: software
 authors:
   - name: "Hermes Labs"
