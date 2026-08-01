@@ -1,15 +1,11 @@
-"""
-Eval harness: run scaffold-corruption strategies through te-drift-detector.
+"""Run synthetic state-change sequences as deterministic demo/self-check fixtures.
 
-This is the benchmark half of the repo. Each strategy in ``strategies`` emits a
-sequence of scaffold-corruption turns that look clean turn-by-turn. The harness
-builds those turns into a conversation, runs the detector over it, and reports
-whether the accumulating corruption is caught.
-
-Everything here is dry-run by construction: no model is called and no network is
-touched (the detector's optional embeddings degrade to a set-overlap metric when
-no Ollama endpoint is present). The harness answers one question: does the
-detector flag scaffold corruption that a per-turn filter would miss?
+The generators and hand-set rules are authored by the same repository, so the
+observed crossings are wiring checks, not evidence of detection efficacy,
+calibrated confidence, or safety severity. The default lexical path stays
+in-process. TE_DRIFT_EMBED=1 can make an optional configured network call; if an
+endpoint request fails or returns no vector, analysis silently falls back to
+lexical set overlap without reporting that fallback.
 
 Usage:
   python -m te_drift.evals.harness                       # all strategies
@@ -55,7 +51,7 @@ def build_conversation(strategy: str, num_turns: int) -> list[tuple[str, str]]:
 
 
 def run_eval(strategy: str, num_turns: int = 5) -> dict:
-    """Run one strategy through the detector and summarize detection."""
+    """Run one synthetic strategy and summarize heuristic rule crossings."""
     conversation = build_conversation(strategy, num_turns)
     detector = TEDriftDetector()
     report = detector.run_conversation(conversation)
@@ -89,10 +85,10 @@ def format_summary(results: list[dict]) -> str:
     """Human-readable one-line-per-strategy summary."""
     lines = []
     lines.append("=" * 74)
-    lines.append("TE DRIFT DETECTOR - EVAL HARNESS (scaffold-corruption strategies)")
+    lines.append("TE DRIFT DETECTOR - SYNTHETIC DEMO/SELF-CHECK")
     lines.append("=" * 74)
     lines.append("")
-    header = f"{'strategy':<20}{'detected':<10}{'first@turn':<12}{'threat':<12}{'max_drift':<10}"
+    header = f"{'strategy':<20}{'crossed':<10}{'first@turn':<12}{'tier':<12}{'max_delta':<10}"
     lines.append(header)
     lines.append("-" * 74)
     for r in results:
@@ -105,15 +101,18 @@ def format_summary(results: list[dict]) -> str:
             f"{r['max_absolute_drift']:<10}"
         )
     lines.append("")
-    caught = sum(1 for r in results if r["detected"])
-    lines.append(f"Detected corruption in {caught}/{len(results)} strategies.")
+    crossed = sum(1 for r in results if r["detected"])
+    lines.append(
+        f"Heuristic crossing in {crossed}/{len(results)} bundled sequences; "
+        "not an efficacy result."
+    )
     lines.append("=" * 74)
     return "\n".join(lines)
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description="TE Drift Detector eval harness - run scaffold-corruption strategies through the detector"
+        description="Run bundled synthetic demo/self-check sequences through hand-set rules"
     )
     parser.add_argument(
         "--strategy",
