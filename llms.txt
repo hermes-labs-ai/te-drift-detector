@@ -22,7 +22,7 @@
     from te_drift import TEDriftDetector
     report = TEDriftDetector().run_conversation([(role, text), ...])
     report["threat_level"]        # legacy uncalibrated heuristic tier name
-    report["anomalies_detected"]  # number of heuristic rule crossings
+    report["anomalies_detected"]  # number of readings classified as anomalous
 
     from te_drift import load_turns, run_drift_analysis
     from te_drift.evals import run_all
