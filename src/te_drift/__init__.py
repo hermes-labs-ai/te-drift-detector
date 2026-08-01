@@ -1,9 +1,9 @@
-"""te-drift-detector: cross-turn scaffold/state drift detection for agent sessions.
+"""te-drift-detector: experimental lexical feature-delta telemetry.
 
 Public API:
-    StateFingerprint, FingerprintComparison  - per-turn feature extraction + drift
-    DriftAnalyzer, DriftReading              - cross-turn anomaly detection
-    TEDriftDetector                          - orchestrator over a full conversation
+    StateFingerprint, FingerprintComparison  - feature extraction + delta comparison
+    DriftAnalyzer, DriftReading              - uncalibrated heuristic rule evaluation
+    TEDriftDetector                          - orchestrator over supplied conversation text
     load_turns, run_drift_analysis           - session JSONL adapter
 """
 

@@ -1,11 +1,9 @@
-"""
-Scaffold-corruption strategy generators for the te-drift-detector eval harness.
+"""Synthetic state-change sequence generators for demo/self-check fixtures.
 
-Each strategy generates a deterministic sequence of scaffold "corruption" turns.
-No model is called and no network is touched: a strategy simply produces the
-text of a system-scaffold injection plus an innocuous user message per turn.
-Those turns are fed to the detector so the eval harness can check that gradual,
-turn-by-turn-clean corruption is caught as it accumulates.
+Each strategy deterministically produces the text of a system-scaffold
+injection plus an innocuous user message per turn. Strategy generation itself
+does not invoke a model or endpoint; later analysis follows the package's
+configured lexical or embedding behavior.
 
 Three strategies:
 1. FACT INJECTION    — insert false "previously established" context facts
@@ -13,8 +11,9 @@ Three strategies:
 3. BIAS DRIFT        — use constraint scaffolds to shift the skepticism dial
 
 Each strategy produces N turns with monotonically increasing expected drift.
-This is eval/benchmark material for a detector, not an attack tool: nothing here
-drives a live model, and there is no dry-run/live switch to flip.
+These repository-authored fixtures exercise wiring; they do not establish
+effectiveness, calibrated confidence, or safety severity. Nothing here drives a
+live model, and there is no dry-run/live switch to flip.
 """
 
 from dataclasses import dataclass

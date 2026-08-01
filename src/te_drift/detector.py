@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""
-TE Drift Detector: scaffold state integrity monitor.
+"""Experimental lexical feature-delta telemetry over supplied conversation text.
 
-Detects multi-turn drift (scaffold poisoning, persona drift, constraint bypass)
-by measuring feature-level drift in scaffold state across turns. This module
-ships a small set of canned conversations so the detector can be exercised
-without any live model.
+This module extracts lexical features, applies hand-set rules, and ships canned
+conversations for deterministic inspection without a live model. Legacy output
+fields named ``confidence`` and ``threat_level`` are uncalibrated heuristic
+values, not safety severity. The output does not establish malicious drift.
 
 Usage:
   python -m te_drift.detector --attack-type poisoning
@@ -213,13 +212,13 @@ class ConversationSimulator:
 
 
 class TEDriftDetector:
-    """Main detection engine."""
+    """Orchestrate feature extraction and heuristic rule evaluation."""
 
     def __init__(self):
         self.analyzer = None
 
     def run_conversation(self, turns: list[tuple[str, str]]) -> dict:
-        """Process a conversation and return a drift analysis report."""
+        """Process a conversation and return a feature-delta report."""
         for i, (role, _text) in enumerate(turns):
             full_context = self._build_context(turns, i)
             fp = StateFingerprint(full_context, role=role)
@@ -243,14 +242,17 @@ class TEDriftDetector:
         """Format a report for human reading."""
         lines = []
         lines.append("=" * 70)
-        lines.append("TE DRIFT DETECTOR - SCAFFOLD STATE INTEGRITY REPORT")
+        lines.append("TE DRIFT DETECTOR - EXPERIMENTAL FEATURE-DELTA REPORT")
         lines.append("=" * 70)
         lines.append("")
 
         lines.append(f"Total Turns Analyzed: {report['total_turns']}")
-        lines.append(f"Anomalies Detected: {report['anomalies_detected']}")
-        lines.append(f"Threat Level: {report['threat_level']}")
-        lines.append(f"Sustained Anomaly: {report.get('sustained_anomaly', False)}")
+        lines.append(f"Readings Classified as Anomalous: {report['anomalies_detected']}")
+        lines.append(
+            "Heuristic Tier (uncalibrated; not safety severity): "
+            f"{report['threat_level']}"
+        )
+        lines.append(f"Sustained Rule Crossing: {report.get('sustained_anomaly', False)}")
         lines.append("")
 
         lines.append(f"Average Drift: {report['avg_absolute_drift']:.4f}")
@@ -268,11 +270,11 @@ class TEDriftDetector:
             lines.append(f"  Velocity Drift: {reading['velocity_drift']:.4f}")
 
             if reading["is_anomaly"]:
-                lines.append("  STATUS: ANOMALY DETECTED")
-                lines.append(f"  Reason: {reading['anomaly_reason']}")
-                lines.append(f"  Confidence: {reading['confidence']:.0%}")
+                lines.append("  RULE STATUS: THRESHOLD CROSSED")
+                lines.append(f"  Rule: {reading['anomaly_reason']}")
+                lines.append(f"  Rule Score (uncalibrated): {reading['confidence']:.0%}")
             else:
-                lines.append("  STATUS: NORMAL")
+                lines.append("  RULE STATUS: NO CROSSING")
 
             lines.append("  Component Breakdown:")
             for component, drift in reading["components"].items():
@@ -295,7 +297,7 @@ _SIMULATIONS = {
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description="TE Drift Detector - scaffold state integrity monitor (canned conversations)"
+        description="Experimental lexical feature-delta telemetry over canned conversations"
     )
     parser.add_argument(
         "--attack-type",
