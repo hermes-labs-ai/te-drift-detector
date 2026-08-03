@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-JSONL adapter: run te-drift-detector on Claude Code (or similar) session JSONLs.
+"""JSONL adapter for experimental lexical feature-delta telemetry.
 
 Extracts user + assistant turns in chronological order, computes a
 StateFingerprint per turn, and runs DriftAnalyzer with a turn-1 baseline.
@@ -10,10 +9,10 @@ Usage:
   python -m te_drift.jsonl_adapter --session-jsonl PATH --mode sliding-window --window-size 10
 
 Modes:
-  cumulative     (default) Embed all turns [0..N] per step — quadratic cost,
-                 highest fidelity. Not viable at SessionEnd on long sessions.
-  sliding-window Embed only the last K turns per step — constant cost O(K)
-                 per step, suitable for a SessionEnd hook on long sessions.
+  cumulative     (default) Compare cumulative text [0..N] per step — quadratic
+                 work. Not viable at SessionEnd on long sessions.
+  sliding-window Compare only the last K turns per step — constant work O(K)
+                 per step, suitable for long-session inspection.
 """
 
 import argparse
@@ -127,7 +126,7 @@ def run_drift_analysis(
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description="TE Drift Detector - session JSONL adapter"
+        description="Experimental lexical feature-delta telemetry for session JSONL"
     )
     parser.add_argument(
         "--session-jsonl", required=True, help="Path to a session .jsonl file"
@@ -150,9 +149,9 @@ def main(argv=None):
         choices=["cumulative", "sliding-window"],
         default="cumulative",
         help=(
-            "Embedding strategy. 'cumulative' (default): embed all turns [0..N] per step "
-            "(highest fidelity, quadratic cost). 'sliding-window': embed only the last "
-            "--window-size turns per step (constant cost, suitable for SessionEnd hooks)."
+            "Context strategy. 'cumulative' (default): compare all turns [0..N] per step "
+            "(quadratic work). 'sliding-window': compare only the last --window-size "
+            "turns per step (constant work)."
         ),
     )
     parser.add_argument(
@@ -202,8 +201,8 @@ def main(argv=None):
     anomalies = report.get("anomalies_detected", 0)
     analyzed = report.get("total_turns", 0)
     print(
-        f"\nSummary: {analyzed} turns analyzed | {anomalies} anomalies | "
-        f"threat={threat} | {elapsed:.1f}s",
+        f"\nSummary: {analyzed} turns analyzed | {anomalies} anomalous readings | "
+        f"heuristic_tier={threat} (uncalibrated) | {elapsed:.1f}s",
         file=sys.stderr,
     )
 

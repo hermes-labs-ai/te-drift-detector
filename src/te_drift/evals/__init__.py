@@ -1,8 +1,10 @@
-"""Eval harness for te-drift-detector.
+"""Synthetic demo/self-check fixtures for te-drift-detector.
 
-Scaffold-corruption strategy generators plus a runner that feeds their output
-through the detector to check that gradual, turn-by-turn-clean corruption is
-caught. Dry-run by construction: no model calls, no network.
+The generators create deterministic text without a live model. Running the
+fixtures through the package is a wiring self-check, not efficacy evidence. The
+default lexical path stays in-process; TE_DRIFT_EMBED=1 can make an optional
+configured network call, and endpoint failure silently falls back to lexical
+set overlap.
 """
 
 from .harness import build_conversation, run_all, run_eval

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "te-drift-detector"
 version = "0.1.0"
-description = "Cross-turn scaffold/state drift detection for agent sessions — catches gradual corruption that looks clean turn-by-turn"
+description = "Experimental lexical feature-delta telemetry for multi-turn text"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -20,12 +20,11 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Security",
 ]
 
 # Zero required runtime dependencies. Everything runs on the standard library.
-# Semantic embeddings are an optional enhancement via a local Ollama endpoint;
-# without it the detector falls back to a set-overlap drift metric.
+# Setting TE_DRIFT_EMBED=1 can send analyzed text to the configured Ollama URL.
+# Endpoint failures silently fall back to lexical set overlap.
 dependencies = []
 
 [project.scripts]

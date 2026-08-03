@@ -3,7 +3,7 @@
 Subcommands:
   detect    Analyze a canned conversation (poisoning / persona / constraint / normal).
   session   Analyze a session JSONL file.
-  eval      Run the scaffold-corruption eval harness through the detector.
+  eval      Run the bundled synthetic demo/self-check fixtures.
 
 Examples:
   te-drift detect --attack-type poisoning
