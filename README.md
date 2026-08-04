@@ -4,10 +4,13 @@
 [![CI](https://github.com/hermes-labs-ai/te-drift-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/hermes-labs-ai/te-drift-detector/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
 
-Experimental lexical feature-delta telemetry for multi-turn text. The package
-extracts a small set of features from supplied text, compares them with a
-baseline, and reports raw deltas and heuristic threshold crossings for human
-triage.
+See how the language, assumptions, and task framing of an AI conversation
+change as the session grows.
+
+`te-drift-detector` provides experimental lexical feature-delta telemetry for
+multi-turn text. It creates lightweight fingerprints, compares later
+conversation state with an initial baseline, and surfaces raw deltas and
+hand-set threshold crossings for human review.
 
 It can flag some curated state shifts under user-adjustable rules. It does not
 establish malicious drift, model compromise, calibrated confidence, or safety
