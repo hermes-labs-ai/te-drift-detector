@@ -12,8 +12,8 @@ type: software
 authors:
   - name: "Hermes Labs"
 license: MIT
-version: "0.1.0"
-date-released: "2026-07-06"
+version: "0.1.1"
+date-released: "2026-08-04"
 repository-code: "https://github.com/hermes-labs-ai/te-drift-detector"
 keywords:
   - large-language-models

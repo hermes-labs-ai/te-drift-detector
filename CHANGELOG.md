@@ -5,9 +5,31 @@ All notable changes to `te-drift-detector` will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [SemVer](https://semver.org/).
 
+## [0.1.1] — 2026-08-04
+
+Release preparation for the first PyPI publication. This patch does not add
+detector features or make an effectiveness claim.
+
+### Changed
+- Bounded the public, installed-package, and documentation claim surfaces to
+  experimental lexical feature-delta telemetry. They now state that synthetic
+  fixtures are implementation self-checks and that efficacy, calibration, and
+  recovery benefit remain unestablished.
+- Clarified the inspection use case, optional embedding-network behavior, and
+  the distinction between raw heuristic crossings and safety findings.
+- Made installation guidance accurate before and after the first PyPI
+  publication.
+
+### Added
+- Claim-surface tests that prevent retired or unsupported product claims from
+  being reintroduced.
+- A tag-bound, trusted-publishing workflow that requires a tag matching the
+  package version, builds distributions, and runs strict Twine validation before
+  the PyPI job.
+
 ## [0.1.0] — 2026-07-06
 
-First public release. Packaged from an internal prototype into a standalone,
+Initial packaged source release. Packaged from an internal prototype into a standalone,
 dependency-free tool.
 
 ### Added

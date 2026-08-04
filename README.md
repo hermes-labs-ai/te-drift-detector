@@ -38,10 +38,18 @@ they are demo/self-check fixtures generated and scored by the same repository.
 
 ## Install
 
-Not yet on PyPI — install from GitHub:
+PyPI publication has not happened yet. Until the `v0.1.1` tag has published
+successfully, install the current source from GitHub:
 
 ```bash
 pip install git+https://github.com/hermes-labs-ai/te-drift-detector
+```
+
+After that tagged publication is available on PyPI, install the released
+package instead:
+
+```bash
+pip install te-drift-detector==0.1.1
 ```
 
 Or from source:
