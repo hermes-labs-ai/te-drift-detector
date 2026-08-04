@@ -12,7 +12,7 @@ from .drift_analyzer import DriftAnalyzer, DriftReading
 from .jsonl_adapter import load_turns, run_drift_analysis
 from .state_fingerprint import FingerprintComparison, StateFingerprint
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = [
     "StateFingerprint",
