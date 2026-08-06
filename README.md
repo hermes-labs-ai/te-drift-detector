@@ -38,16 +38,6 @@ they are demo/self-check fixtures generated and scored by the same repository.
 
 ## Install
 
-PyPI publication has not happened yet. Until the `v0.1.1` tag has published
-successfully, install the current source from GitHub:
-
-```bash
-pip install git+https://github.com/hermes-labs-ai/te-drift-detector
-```
-
-After that tagged publication is available on PyPI, install the released
-package instead:
-
 ```bash
 pip install te-drift-detector==0.1.1
 ```
@@ -189,6 +179,6 @@ MIT. See [LICENSE](LICENSE).
 
 ## About Hermes Labs
 
-Hermes Labs builds tools for inspecting AI-system behavior. In this repository,
+[Hermes Labs](https://hermes-labs.ai) is an AI reliability engineering studio for product and engineering teams shipping production agents and LLM applications. In this repository,
 the supported description is experimental lexical feature-delta telemetry; no
 claim of calibrated safety detection or production effectiveness is implied.
