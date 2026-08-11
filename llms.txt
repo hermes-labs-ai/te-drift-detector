@@ -7,12 +7,6 @@
 
 ## Install
 
-Before the first PyPI publication completes:
-
-    pip install git+https://github.com/hermes-labs-ai/te-drift-detector
-
-After the `v0.1.1` tag has published successfully:
-
     pip install te-drift-detector==0.1.1
 
 ## CLI
