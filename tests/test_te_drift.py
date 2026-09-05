@@ -7,9 +7,13 @@ hermetic: they do not require a running Ollama endpoint (drift falls back to a
 set-overlap metric when embeddings are unavailable).
 """
 
+import json
+import os
+import tempfile
 import unittest
 
 from te_drift.drift_analyzer import DriftAnalyzer
+from te_drift.jsonl_adapter import load_turns
 from te_drift.state_fingerprint import FingerprintComparison, StateFingerprint
 
 
@@ -226,6 +230,46 @@ class TestIntegration(unittest.TestCase):
         for text in conversation[1:]:
             analyzer.analyze_turn(StateFingerprint(text))
         self.assertFalse(analyzer.has_sustained_anomaly())
+
+
+class TestJsonlAdapter(unittest.TestCase):
+    def test_load_turns_ignores_malformed_text_blocks(self):
+        records = [
+            {"type": "user", "message": {"role": "user", "content": "first"}, "timestamp": "t1"},
+            {
+                "type": "assistant",
+                "message": {
+                    "role": "assistant",
+                    "content": [
+                        {"type": "text"},                       # missing text key
+                        {"type": "text", "text": None},         # non-string text
+                        {"type": "text", "text": 42},           # non-string text
+                        {"type": "text", "text": "kept"},       # valid
+                        {"type": "tool_use", "text": "nope"},   # wrong block type
+                        "not a dict",
+                        {"type": "text", "text": "also kept"},  # valid
+                    ],
+                },
+                "timestamp": "t2",
+            },
+            {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "text"}]}, "timestamp": "t3"},
+            {"type": "user", "message": {"role": "user", "content": "later valid"}, "timestamp": "t4"},
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "session.jsonl")
+            with open(path, "w", encoding="utf-8") as f:
+                for record in records:
+                    f.write(json.dumps(record) + "\n")
+            turns = load_turns(path)
+
+        self.assertEqual(
+            turns,
+            [
+                ("user", "first", "t1"),
+                ("assistant", "kept also kept", "t2"),
+                ("user", "later valid", "t4"),
+            ],
+        )
 
 
 if __name__ == "__main__":
