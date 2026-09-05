@@ -11,11 +11,11 @@ input always yields the same output, independent of what services happen to be
 running locally. There are zero required third-party dependencies — everything
 here is the Python standard library.
 
-Semantic embeddings are an optional, opt-in enhancement. When TE_DRIFT_EMBED=1
-is set and a local Ollama endpoint is reachable, set-overlap is replaced by
-embedding cosine distance. This raises fidelity on paraphrase but lowers
-sensitivity to subtle lexical corruption, so it is off by default and callers
-turn it on deliberately.
+Semantic embeddings are optional and unevaluated. Setting TE_DRIFT_EMBED=1 can
+make an optional configured network call to TE_DRIFT_OLLAMA_URL and transmit
+derived text features. If either endpoint request fails or returns no vector,
+the implementation silently falls back to lexical set overlap. Reports do not
+expose the active comparison mode or fallback.
 
 Environment overrides:
     TE_DRIFT_EMBED=1      enable optional Ollama semantic embeddings (default: off)

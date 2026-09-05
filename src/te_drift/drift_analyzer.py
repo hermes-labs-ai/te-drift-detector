@@ -1,9 +1,8 @@
-"""
-Drift analyzer: detect anomalies in scaffold state evolution.
+"""Apply hand-set rules to lexical feature deltas.
 
-Measures both absolute drift from baseline and drift velocity (rate of change).
-Flags when drift exceeds normal-conversation thresholds, or when a known
-multi-turn attack signature is matched.
+The legacy fields named ``confidence`` and ``threat_level`` are uncalibrated
+rule scores and heuristic tiers. The output does not establish malicious drift
+and is not safety severity.
 """
 
 from dataclasses import dataclass, field
@@ -21,7 +20,7 @@ class DriftReading:
     component_drifts: dict[str, float] = field(default_factory=dict)
     is_anomaly: bool = False
     anomaly_reason: str = ""
-    confidence: float = 0.0  # 0-1 confidence in anomaly
+    confidence: float = 0.0  # 0-1 uncalibrated heuristic rule score
 
 
 class DriftAnalyzer:
@@ -173,7 +172,7 @@ class DriftAnalyzer:
         return self.consecutive_anomalies >= self.CONSECUTIVE_ANOMALY_THRESHOLD
 
     def get_threat_level(self) -> str:
-        """Classify current threat level based on recent readings."""
+        """Return the legacy uncalibrated heuristic tier for recent readings."""
         if not self.readings:
             return "UNKNOWN"
 
