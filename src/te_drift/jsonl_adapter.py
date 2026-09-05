@@ -33,8 +33,13 @@ def _extract_text(message: dict) -> str:
     if isinstance(content, list):
         parts = []
         for block in content:
-            if isinstance(block, dict) and block.get("type") == "text":
-                parts.append(block["text"])
+            if not isinstance(block, dict) or block.get("type") != "text":
+                continue
+            text = block.get("text")
+            # Malformed text blocks (missing or non-string ``text``) are ignored
+            # so one bad block never aborts the whole transcript load.
+            if isinstance(text, str):
+                parts.append(text)
         return " ".join(parts).strip()
     return ""
 
