@@ -34,3 +34,46 @@ jobs:
 
       - name: CLI smoke
         run: te-drift --help
+
+  advisory-intent-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Map development commitments to CI evidence
+        id: coverage
+        continue-on-error: true
+        uses: hermes-labs-ai/intent-verify@39293fbd844ebb1f3b0e89902ac7b48457abba13
+        with:
+          spec: AGENTS.md
+          repo: .
+          section: Development signal
+          evidence-paths: |
+            .github/workflows/ci.yml
+            pyproject.toml
+            tests
+
+      - name: Publish advisory coverage summary
+        if: always()
+        env:
+          RECEIPT: ${{ steps.coverage.outputs.receipt }}
+        run: |
+          test -n "$RECEIPT"
+          python -m intent_verify.summary --input "$RECEIPT" --github-summary
+
+      - name: Assert advisory map contract
+        if: always()
+        env:
+          RECEIPT: ${{ steps.coverage.outputs.receipt }}
+        run: |
+          python - "$RECEIPT" <<'PY'
+          import json
+          import sys
+
+          payload = json.load(open(sys.argv[1], encoding="utf-8"))
+          assert payload["schema_version"] == "intent-verify.coverage-map.v1"
+          assert payload["acceptance_authority"] is False
+          assert len(payload["items"]) == 3
+          assert {item["verdict"] for item in payload["items"]} <= {"covered", "partial", "gap"}
+          assert payload["verdict"] in {"covered", "partial", "gap"}
+          PY
