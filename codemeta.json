@@ -1,0 +1,17 @@
+{
+  "@context": "https://w3id.org/codemeta/3.1",
+  "@type": "SoftwareSourceCode",
+  "name": "te-drift-detector",
+  "description": "Experimental lexical feature-delta telemetry for multi-turn text",
+  "codeRepository": "https://github.com/hermes-labs-ai/te-drift-detector",
+  "version": "0.1.1",
+  "license": "https://spdx.org/licenses/MIT",
+  "programmingLanguage": "Python",
+  "runtimePlatform": "Python >=3.10",
+  "identifier": [
+    "https://pypi.org/project/te-drift-detector/0.1.1/"
+  ],
+  "author": [{"@type": "Organization", "name": "Hermes Labs"}],
+  "url": "https://github.com/hermes-labs-ai/te-drift-detector",
+  "keywords": ["large-language-models", "agents", "drift-detection", "multi-turn", "evaluation", "monitoring"]
+}
