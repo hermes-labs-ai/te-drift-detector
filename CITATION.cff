@@ -10,7 +10,10 @@ abstract: >-
   severity.
 type: software
 authors:
-  - name: "Hermes Labs"
+  - family-names: "Bosch Rodriguez"
+    given-names: "Rolando"
+    orcid: "https://orcid.org/0009-0005-4896-1112"
+    affiliation: "Hermes Labs"
 license: MIT
 version: "0.1.1"
 date-released: "2026-08-04"
