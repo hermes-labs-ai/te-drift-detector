@@ -43,7 +43,7 @@ jobs:
       - name: Map development commitments to CI evidence
         id: coverage
         continue-on-error: true
-        uses: hermes-labs-ai/intent-verify@39293fbd844ebb1f3b0e89902ac7b48457abba13
+        uses: hermes-labs-ai/intent-verify@df29c2e1f2e400fdec0ad515332884a8c821bd15
         with:
           spec: AGENTS.md
           repo: .
