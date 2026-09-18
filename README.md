@@ -63,6 +63,31 @@ te-drift detect --attack-type normal
 te-drift eval
 ```
 
+`te-drift eval` exits `0` on success and prints a summary table ending in a
+boundary line. With the default bundled fixtures (verified against
+`te-drift-detector==0.1.1`), all three synthetic strategies cross their
+hand-set thresholds:
+
+```
+==========================================================================
+TE DRIFT DETECTOR - SYNTHETIC DEMO/SELF-CHECK
+==========================================================================
+
+strategy            crossed   first@turn  tier        max_delta
+--------------------------------------------------------------------------
+fact_injection      YES       5           CRITICAL    0.5784
+term_redefinition   YES       7           CRITICAL    0.2949
+bias_drift          YES       8           CRITICAL    0.3475
+
+Heuristic crossing in 3/3 bundled sequences; not an efficacy result.
+==========================================================================
+```
+
+That last line is the boundary to keep in view: a crossing on these bundled,
+self-scored fixtures confirms the wiring runs deterministically end-to-end. It
+is not an efficacy result, and it says nothing about detection quality,
+false-positive/false-negative rates, or generalization to real conversations.
+
 Analyze a supported session transcript (JSONL, one user or assistant record per
 turn):
 
