@@ -43,28 +43,22 @@ jobs:
       - name: Map development commitments to CI evidence
         id: coverage
         continue-on-error: true
-        uses: hermes-labs-ai/intent-verify@df29c2e1f2e400fdec0ad515332884a8c821bd15
+        uses: hermes-labs-ai/intent-verify@7b7ff7687f0d9b51f17a59ff54c758d0d93e14a5 # v0.2.1
         with:
           spec: AGENTS.md
           repo: .
           section: Development signal
+          summary: true
           evidence-paths: |
             .github/workflows/ci.yml
             pyproject.toml
             tests
 
-      - name: Publish advisory coverage summary
-        if: always()
-        env:
-          RECEIPT: ${{ steps.coverage.outputs.receipt }}
-        run: |
-          test -n "$RECEIPT"
-          python -m intent_verify.summary --input "$RECEIPT" --github-summary
-
       - name: Assert advisory map contract
         if: always()
         env:
           RECEIPT: ${{ steps.coverage.outputs.receipt }}
+          SUMMARY_WRITTEN: ${{ steps.coverage.outputs.summary-written }}
         run: |
           python - "$RECEIPT" <<'PY'
           import json
@@ -77,3 +71,4 @@ jobs:
           assert {item["verdict"] for item in payload["items"]} <= {"covered", "partial", "gap"}
           assert payload["verdict"] in {"covered", "partial", "gap"}
           PY
+          test "$SUMMARY_WRITTEN" = true
