@@ -1,14 +1,23 @@
-# te-drift-detector
+<div align="center">
+
+<h1>te-drift-detector</h1>
+
+`te-drift-detector` provides experimental lexical feature-delta telemetry for multi-turn text.
+
+te-drift-detector is developed by [Hermes Labs](https://hermes-labs.ai).
+
+Hermes Labs is an agentic infrastructure company building the reliability layer for autonomous systems.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![CI](https://github.com/hermes-labs-ai/te-drift-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/hermes-labs-ai/te-drift-detector/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
 
+</div>
+
 See how the language, assumptions, and task framing of an AI conversation
 change as the session grows.
 
-`te-drift-detector` provides experimental lexical feature-delta telemetry for
-multi-turn text. It creates lightweight fingerprints, compares later
+It creates lightweight fingerprints, compares later
 conversation state with an initial baseline, and surfaces raw deltas and
 hand-set threshold crossings for human review.
 
@@ -204,6 +213,6 @@ MIT. See [LICENSE](LICENSE).
 
 ## About Hermes Labs
 
-[Hermes Labs](https://hermes-labs.ai) is an AI reliability engineering studio for product and engineering teams shipping production agents and LLM applications. In this repository,
+[Hermes Labs](https://hermes-labs.ai) is an agentic infrastructure company building the reliability layer for autonomous systems. In this repository,
 the supported description is experimental lexical feature-delta telemetry; no
 claim of calibrated safety detection or production effectiveness is implied.
